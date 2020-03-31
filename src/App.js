@@ -1,73 +1,88 @@
-import React, { useState } from "react";
-import { Row, Col, Menu, Button } from "antd";
+import React, { useState, useEffect } from "react";
+import { Layout, Menu, message, Dropdown } from "antd";
 import {
+  DownOutlined,
   HomeOutlined,
-  AppstoreOutlined,
+  FileImageFilled,
+  FileImageOutlined,
   SettingOutlined
 } from "@ant-design/icons";
-const { SubMenu } = Menu;
+import { BrowserRouter, Route, Switch } from "react-router-dom";
+import Home from "./routes/Home";
+import Photo from "./routes/Photo";
+import GTAV from "./routes/GTAV";
+
+const { Header, Content, Footer } = Layout;
 
 function App() {
-  const [state, setState] = useState({
-    current: "mail"
-  });
+  const [menukey, setMenukey] = useState("/");
 
-  const handleClick = e => {
-    setState({
-      current: e.key
-    });
+  const handleSettingsClick = ({ key }) => {
+    message.info(`Click on setting ${key}`);
   };
 
+  const handleClick = e => {
+    setMenukey("settings");
+    console.log(`Click on ${e.key}`);
+  };
+
+  const menu = (
+    <Menu onClick={handleSettingsClick}>
+      <Menu.Item key="1">1st settings</Menu.Item>
+      <Menu.Item key="2">2nd settings</Menu.Item>
+      <Menu.Item key="3">3rd settings</Menu.Item>
+    </Menu>
+  );
+
+  useEffect(() => {
+    setMenukey(window.location.pathname.toLowerCase());
+  }, []);
+
   return (
-    <Row justify="center">
-      <Col span={18} offset={3}>
-        <Menu
-          onClick={handleClick}
-          selectedKeys={[state.current]}
-          mode="horizontal"
-        >
-          <Menu.Item key="mail">
-            <HomeOutlined />
-            <a
-              href="/"
-              rel="noopener noreferrer"
+    <React.Fragment>
+      <BrowserRouter>
+        <Layout className="layout">
+          <Header>
+            <Menu
+              theme="dark"
+              mode="horizontal"
+              selectedKeys={[menukey]}
+              onClick={handleClick}
             >
-              Home
-            </a>
-          </Menu.Item>
-          {/* <Menu.Item key="app" disabled>
-          <AppstoreOutlined />
-          Navigation Two
-        </Menu.Item> */}
-          <SubMenu
-            title={
-              <span className="submenu-title-wrapper">
-                <SettingOutlined />
-                Settings
-              </span>
-            }
-          >
-            <Menu.ItemGroup title="Setting 1">
-              <Menu.Item key="setting:1">Option 1</Menu.Item>
-              <Menu.Item key="setting:2">Option 2</Menu.Item>
-            </Menu.ItemGroup>
-            <Menu.ItemGroup title="Item 2">
-              <Menu.Item key="setting:3">Option 3</Menu.Item>
-              <Menu.Item key="setting:4">Option 4</Menu.Item>
-            </Menu.ItemGroup>
-          </SubMenu>
-          {/* <Menu.Item key="alipay">
-            <a
-              href="https://ant.design"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Navigation Four - Link
-            </a>
-          </Menu.Item> */}
-        </Menu>
-      </Col>
-    </Row>
+              <Menu.Item key="/">
+                <HomeOutlined />
+                <a href="/">Home</a>
+              </Menu.Item>
+              <Menu.Item key="/photo">
+                <FileImageFilled />
+                <a href="/photo">Photo</a>
+              </Menu.Item>
+              <Menu.Item key="/gtav">
+                <FileImageOutlined />
+                <a href="/gtav">GTA V</a>
+              </Menu.Item>
+              <Menu.Item key="/settings">
+                <Dropdown overlay={menu}>
+                  <a href="/" onClick={e => e.preventDefault()}>
+                    <SettingOutlined />Settings <DownOutlined />
+                  </a>
+                </Dropdown>
+              </Menu.Item>
+            </Menu>
+          </Header>
+          <Content style={{ padding: "20px 200px" }}>
+            <Switch>
+              <Route path="/" component={Home} exact />
+              <Route path="/photo" component={Photo} />
+              <Route path="/gtav" component={GTAV} />
+            </Switch>
+          </Content>
+          <Footer style={{ textAlign: "center" }}>
+            webpage ©2020 Created by Giselle Puipui
+          </Footer>
+        </Layout>
+      </BrowserRouter>
+    </React.Fragment>
   );
 }
 

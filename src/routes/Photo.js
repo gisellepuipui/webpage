@@ -44,7 +44,7 @@ const Photo = () => {
             />
           }
         >
-          <a href="https://giselle-puipui.web.app/" target="_blank" rel="noopener noreferrer" >Giselle Puipui as Hinata Hyuga</a>
+          <a href="https://giselle-puipui.web.app/" target="_blank" rel="noopener noreferrer" >As Hinata Hyuga</a>
         </Card>
         </Col>
       </Row>
